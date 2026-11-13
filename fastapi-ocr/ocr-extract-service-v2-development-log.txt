@@ -1,0 +1,292 @@
+OCR Extract Service – Daily Coding & Learning Log
+
+* Daily coding activities
+* Errors/issues encountered
+* Debugging steps
+* ChatGPT-assisted fixes
+* Technical guidance received
+* New concepts/learning
+* Decisions and solutions
+* Pending tasks or follow-ups
+
+# Sample Format #
+
+[2026-08-26]
+
+### Work Done
+- Implemented ...
+
+### Issues / Errors
+- Encountered ...
+
+### Debugging
+- Checked ...
+- Found that ...
+
+### Solution
+- Fixed by ...
+
+### ChatGPT Assistance
+- Used ChatGPT to understand/debug ...
+
+### Learning
+- Learned ...
+
+### Pending / Next Steps
+- Continue ...
+
+#####################
+
+
+# 26/08/2026 (Wednesday) #
+
+Reference:- ChatGPT Note Responses (Msg time)
+
+1. Today 10:25 PM
+2. Today 10:25 PM next response
+
+# 1. Output shows wrong, for Amount, Total Amount & GST also. 
+
+To be debugging using print for each steps given below.
+
+Debug it stage by stage.
+
+Stage 1 — Image
+Stage 2 — Preprocessing (if image look bad, don't touch keyword matching). Problem is pre-processing
+Stage 3 — Raw Tesseract output
+Stage 4 — DataFrame
+Stage 5 — After filtering
+Stage 6 — Reconstructed lines
+Stage 7 — Keyword matching
+Stage 8 — Final response
+
+Use this debugging table
+
+For every problem, create a small table mentally or in your notes:
+
+| Stage             | Expected       | Actual     | Problem?    |
+| ----------------- | -------------- | ---------- | ----------- |
+| Image             | `500`          | `500`      | No          |
+| Tesseract         | `500`          | `500`      | No          |
+| DataFrame         | `500`          | `500`      | No          |
+| Confidence filter | `500`          | removed    | **Yes**     |
+| Grouping          | `Amount:- 500` | `Amount:-` | **Yes**     |
+| Matching          | `Amount`       | matched    | No          |
+| Response          | `Amount:- 500` | `Amount:-` | consequence |
+
+#####################
+
+# 27/08/2026 - 11.00 PM #
+
+### Work Done
+1 - Implemented the debugging process in "Raw Tesseract output".
+temporarily print the details using below lines of code
+
+"""
+After this code
+ocr_data = pytesseract.image_to_data(...)
+"""
+
+"""
+debugging print code
+
+for i in range(len(ocr_data["text"])):
+
+    text = ocr_data["text"][i]
+
+    if text.strip():
+
+        print(
+            "TEXT:",
+            repr(text),
+            "| CONF:",
+            ocr_data["conf"][i],
+            "| LEFT:",
+            ocr_data["left"][i],
+            "| TOP:",
+            ocr_data["top"][i],
+            "| LINE:",
+            ocr_data["line_num"][i]
+        )
+"""
+2 - Implemented the Preprocessing image for "original image", "grayscale image"
+"upscaled image", & "threshold image" using below lines of code.
+
+"""
+# Decode uploaded image
+
+img = cv2.imdecode(
+    nparr,
+    cv2.IMREAD_COLOR
+)
+
+# 1. Save original
+cv2.imwrite(
+    "debug_original.png",
+    img
+)
+
+
+# 2. Convert to grayscale
+gray = cv2.cvtColor(
+    img,
+    cv2.COLOR_BGR2GRAY
+)
+
+cv2.imwrite(
+    "debug_gray.png",
+    gray
+)
+
+
+# 3. Upscale
+upscaled = cv2.resize(
+    gray,
+    None,
+    fx=4,
+    fy=4,
+    interpolation=cv2.INTER_CUBIC
+)
+
+cv2.imwrite(
+    "debug_upscaled.png",
+    upscaled
+)
+
+
+# 4. Threshold
+_, thresh = cv2.threshold(
+    upscaled,
+    0,
+    255,
+    cv2.THRESH_BINARY | cv2.THRESH_OTSU
+)
+
+cv2.imwrite(
+    "debug_threshold.png",
+    thresh
+)
+
+"""
+
+### Issues / Errors
+- Encountered this output in "Raw Tesseract output"
+
+"""
+TEXT: 'Jaswanth' | CONF: 80 | LEFT: 24 | TOP: 25 | LINE: 1
+TEXT: 'Scans' | CONF: 96 | LEFT: 131 | TOP: 26 | LINE: 1
+TEXT: 'Invoice:-' | CONF: 91 | LEFT: 24 | TOP: 49 | LINE: 2
+TEXT: '12345' | CONF: 96 | LEFT: 144 | TOP: 51 | LINE: 2
+TEXT: 'Amount:' | CONF: 23 | LEFT: 22 | TOP: 76 | LINE: 3
+TEXT: '-' | CONF: 23 | LEFT: 109 | TOP: 72 | LINE: 3
+TEXT: '566' | CONF: 75 | LEFT: 132 | TOP: 76 | LINE: 3
+TEXT: 'GST:-' | CONF: 91 | LEFT: 23 | TOP: 101 | LINE: 1
+TEXT: '98' | CONF: 75 | LEFT: 95 | TOP: 101 | LINE: 1
+TEXT: 'Total' | CONF: 92 | LEFT: 23 | TOP: 125 | LINE: 1
+TEXT: 'Amount:-' | CONF: 92 | LEFT: 94 | TOP: 126 | LINE: 1
+TEXT: '598' | CONF: 59 | LEFT: 204 | TOP: 126 | LINE: 1
+TEXT: 'Due' | CONF: 93 | LEFT: 23 | TOP: 151 | LINE: 2
+TEXT: 'Date:-' | CONF: 91 | LEFT: 71 | TOP: 151 | LINE: 2
+TEXT: '36/08/2626' | CONF: 76 | LEFT: 156 | TOP: 150 | LINE: 2
+"""
+
+### ChatGPT Assistance
+- Used ChatGPT to understand/debug.
+
+### Pending / Next Steps
+- Continue tomorrow & Fixed the "Raw Tesseract output" & other all debugging
+debugging methods in ChatGPT Reference (26/08/2026 - 10:25 PM) note.
+
+###############
+
+# 28/08/2026 #
+
+### Work Done
+1 - Implemented the debugging process in DataFrame.
+Print the debugging details using below lines of code.
+
+"""
+After this code         
+df = pd.DataFrame(ocr_data)
+
+debugging print code
+print(
+    df[
+        [
+            "text",
+            "conf",
+            "left",
+            "top",
+            "width",
+            "height",
+            "block_num",
+            "par_num",
+            "line_num"
+        ]
+    ].to_string(index=False)
+)
+"""
+
+### Issues / Errors
+- Encountered this output in DataFrame
+
+"""
+text  conf  left  top  width  height  block_num  par_num  line_num
+              -1     0    0    499     264          0        0         0
+              -1    22   25    251     142          1        0         0
+              -1    22   25    179      65          1        1         0
+              -1    24   25    164      15          1        1         1
+  Jaswanth    80    24   25     92      15          1        1         1
+     Scans    96   131   26     57      14          1        1         1
+              -1    24   49    177      16          1        1         2
+ Invoice:-    91    24   49    103      16          1        1         2
+     12345    96   144   51     57      14          1        1         2
+              -1    22   76    143      14          1        1         3
+   Amount:    23    22   76     93      14          1        1         3
+         -    23   109   72     10      28          1        1         3
+       566    75   132   76     33      14          1        1         3
+              -1    23  101     94      14          1        2         0
+              -1    23  101     94      14          1        2         1
+     GST:-    91    23  101     56      14          1        2         1
+        98    75    95  101     22      14          1        2         1
+              -1    23  125    250      42          1        3         0
+              -1    23  125    214      15          1        3         1
+     Total    92    23  125     58      15          1        3         1
+  Amount:-    92    94  126     93      14          1        3         1
+       598    59   204  126     33      14          1        3         1
+              -1    23  150    250      17          1        3         2
+       Due    93    23  151     34      14          1        3         2
+    Date:-    91    71  151     68      14          1        3         2
+36/08/2626    76   156  150    117      17          1        3         2
+"""
+
+### ChatGPT Assistance
+- Used ChatGPT to understand/debug.
+
+### Pending / Next Steps
+- Continue the other all debugging methods in ChatGPT 
+Reference (26/08/2026 - 10:25 PM) note.
+
+̥# 29/08/2026 - 07.50 PM # 
+
+### Work Done
+- Implemented ...
+
+### Issues / Errors
+- Encountered ...
+
+### Debugging
+- Checked ...
+- Found that ...
+
+### Solution
+- Fixed by ...
+
+### ChatGPT Assistance
+- Used ChatGPT to understand/debug ...
+
+### Learning
+- Learned ...
+
+### Pending / Next Steps
+- Continue ...
