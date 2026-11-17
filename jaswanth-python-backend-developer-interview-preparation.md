@@ -5,6 +5,10 @@
 **Target experience level:** 2--4 years\
 **Basis:** Questions tailored to the uploaded resume.
 
+**Concept:** Understand what is happening.
+**Practical example:** See how it works in real projects.
+**Interview answer:** How to explain it confidently to an interviewer.
+
 ------------------------------------------------------------------------
 
 ## 1. Initial assessment of the resume
@@ -117,6 +121,10 @@ in the resume.
 18. How do you handle file uploads?
 19. How do you implement pagination?
 20. How do you structure a large Flask application?
+Answer:-
+
+
+
 21. How do you separate routes, business logic, database operations, and
     validation?
 22. How do you manage database connections in FastAPI?
