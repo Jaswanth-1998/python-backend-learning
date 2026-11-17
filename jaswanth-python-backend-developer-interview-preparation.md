@@ -5,9 +5,9 @@
 **Target experience level:** 2--4 years\
 **Basis:** Questions tailored to the uploaded resume.
 
-**Concept:** Understand what is happening.
-**Practical example:** See how it works in real projects.
-**Interview answer:** How to explain it confidently to an interviewer.
+**Concept:** Understand what is happening.\
+**Practical example:** See how it works in real projects.\
+**Interview answer:** How to explain it confidently to an interviewer.\
 
 ------------------------------------------------------------------------
 
