@@ -6,6 +6,9 @@ app = Flask(__name__)
 # Create a Flask Blueprint for the items API
 items_bp = Blueprint('items', __name__)
 
+# IMPORTANT: Register Blueprint
+app.register_blueprint(items_bp)
+
 # Sample items data
 items = {
     1: {
@@ -45,8 +48,6 @@ def get_item(item_id):
     # Return item as JSON
     return jsonify(item), 200
 
-# IMPORTANT: Register Blueprint
-app.register_blueprint(items_bp)
 
 # Entry point
 if __name__ == "__main__":
