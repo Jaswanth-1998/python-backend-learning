@@ -115,7 +115,7 @@ git pull origin main
 
 **Do your coding.**
 
-**Finish working**
+**Finish working**  
 
 ```
 git add .
